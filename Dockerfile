@@ -21,7 +21,7 @@ EXPOSE 1200/udp
 LABEL DESCRIPTION="This images creates a Counter Strike 1.6 Server"
  
 RUN yum update -y && \
-    yum install glibc.i686 libstdc++ libstdc++.i686 wget -y
+    yum install glibc.i686 libstdc++ libstdc++.i686 wget libcurl.x86_64 -y
 
 RUN useradd -m -d /opt/css csserver 
 
@@ -39,13 +39,20 @@ RUN /opt/css/steamcmd.sh +login anonymous \
                           +app_update 90 validate \
                           +quit
 
-RUN mkdir $HOME/.steam && touch /opt/css/.steam/steamclient.so
+RUN /opt/css/steamcmd.sh +login anonymous \
+                          +force_install_dir /opt/css/csserver \
+                          +app_set_config 90 mod cstrike \
+                          +app_update 90 validate \
+                          +quit
+
+RUN mkdir -p /opt/css/.steam && ln -s /opt/css/linux32 /opt/css/.steam/sdk32
+             
 
 #TODO server configs esl
  
 
 # Start the server
 WORKDIR /opt/css/csserver
-#ENTRYPOINT ./hlds_run -game cstrike -strictportbind -ip 0.0.0.0 -port $PORT +clientport $CLIENTPORT  +map $DEFAULTMAP -maxplayers $MAXPLAYERS
-ENTRYPOINT ["./hlds_run"]
-CMD ["+sv_lan 1", "+map de_dust"] 
+ENTRYPOINT ./hlds_run -game cstrike -strictportbind -ip 0.0.0.0 -port $PORT +clientport $CLIENTPORT  +map $DEFAULTMAP -maxplayers $MAXPLAYERS
+#ENTRYPOINT ["./hlds_run"]
+#CMD ["+sv_lan 1", "+map de_dust"] 
