@@ -35,6 +35,12 @@ RUN /opt/css/steamcmd.sh +login anonymous \
                           +app_update 90 validate \
                           +quit
 
+RUN /opt/css/steamcmd.sh +login anonymous \
+                          +force_install_dir /opt/css/csserver \
+                          +app_update 90 validate \
+                          +quit
+
+
 #TODO server configs esl
  
 # script refuses to run in root, create user
@@ -42,10 +48,7 @@ RUN useradd -m csserver
 
 USER csserver
 
-WORKDIR /home/csserver
- 
- 
 # Start the server
-WORKDIR /home/csserver/serverfiles
+WORKDIR /opt/css/csserver
 #ENTRYPOINT ./hlds_run -game cstrike -strictportbind -ip 0.0.0.0 -port $PORT +clientport $CLIENTPORT  +map $DEFAULTMAP -maxplayers $MAXPLAYERS
 ENTRYPOINT ["./hlds_run"]
