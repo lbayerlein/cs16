@@ -23,8 +23,11 @@ LABEL DESCRIPTION="This images creates a Counter Strike 1.6 Server"
 RUN yum update -y && \
     yum install glibc.i686 libstdc++ libstdc++.i686 wget -y
 
-RUN mkdir /opt/css && \
-    cd /opt/css && \
+RUN useradd -m -d /opt/css csserver 
+
+USER csserver
+
+RUN cd /opt/css && \
     wget http://media.steampowered.com/installer/steamcmd_linux.tar.gz && \
     tar -xvzf steamcmd_linux.tar.gz
 
@@ -36,12 +39,10 @@ RUN /opt/css/steamcmd.sh +login anonymous \
                           +app_update 90 validate \
                           +quit
 
+RUN mkdir $HOME/.steam && touch /opt/css/.steam/steamclient.so
+
 #TODO server configs esl
  
-# script refuses to run in root, create user
-RUN useradd -m csserver
-
-USER csserver
 
 # Start the server
 WORKDIR /opt/css/csserver
