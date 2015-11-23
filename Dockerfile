@@ -37,9 +37,8 @@ RUN /opt/css/steamcmd.sh +login anonymous \
                           +force_install_dir /opt/css/csserver \
                           +app_set_config 90 mod cstrike \
                           +app_update 90 validate \
-                          +quit
-
-RUN /opt/css/steamcmd.sh +login anonymous \
+                          +quit && \
+			  /opt/css/steamcmd.sh +login anonymous \
                           +force_install_dir /opt/css/csserver \
                           +app_set_config 90 mod cstrike \
                           +app_update 90 validate \
