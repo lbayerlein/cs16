@@ -32,14 +32,9 @@ RUN mkdir /opt/css/csserver
 
 RUN /opt/css/steamcmd.sh +login anonymous \
                           +force_install_dir /opt/css/csserver \
+                          +app_set_config 90 mod cstrike \
                           +app_update 90 validate \
                           +quit
-
-RUN /opt/css/steamcmd.sh +login anonymous \
-                          +force_install_dir /opt/css/csserver \
-                          +app_update 90 validate \
-                          +quit
-
 
 #TODO server configs esl
  
@@ -52,3 +47,4 @@ USER csserver
 WORKDIR /opt/css/csserver
 #ENTRYPOINT ./hlds_run -game cstrike -strictportbind -ip 0.0.0.0 -port $PORT +clientport $CLIENTPORT  +map $DEFAULTMAP -maxplayers $MAXPLAYERS
 ENTRYPOINT ["./hlds_run"]
+CMD ["+sv_lan 1", "+map de_dust"] 
