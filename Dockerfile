@@ -28,8 +28,10 @@ RUN mkdir /opt/css && \
     wget http://media.steampowered.com/installer/steamcmd_linux.tar.gz && \
     tar -xvzf steamcmd_linux.tar.gz
 
-RUN /opt/csgo/steamcmd.sh +login anonymous \
-                          +force_install_dir /opt/csgo/csgoserver \
+RUN mkdir /opt/css/csserver
+
+RUN /opt/css/steamcmd.sh +login anonymous \
+                          +force_install_dir /opt/css/csserver \
                           +app_update 90 validate \
                           +quit
 
@@ -37,8 +39,6 @@ RUN /opt/csgo/steamcmd.sh +login anonymous \
  
 # script refuses to run in root, create user
 RUN useradd -m csserver
-
-RUN adduser csserver 
 
 USER csserver
 
